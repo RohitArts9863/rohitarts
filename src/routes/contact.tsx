@@ -63,9 +63,24 @@ function Contact() {
           <br />
           Open Monday to Saturday, 9:30 AM – 8:00 PM
         </p>
-        <div className="mt-3 grid aspect-[16/9] w-full place-items-center rounded-xl bg-secondary text-[11px] font-medium uppercase tracking-[0.15em] text-muted-foreground">
-          Map coming soon
+        <div className="mt-3 overflow-hidden rounded-xl ring-1 ring-primary/10">
+          <iframe
+            title="Rohit Art's location on Google Maps"
+            src={`https://www.google.com/maps?q=${encodeURIComponent(BUSINESS.mapsQuery)}&z=16&output=embed`}
+            className="h-[260px] w-full border-0"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
         </div>
+        <a
+          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(BUSINESS.mapsQuery)}`}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-3 inline-flex items-center justify-center h-11 w-full rounded-xl bg-primary text-[13px] font-bold text-primary-foreground shadow-cta"
+        >
+          Open in Google Maps
+        </a>
       </div>
     </div>
   );

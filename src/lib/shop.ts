@@ -4,7 +4,8 @@ export const BUSINESS = {
   owner: "Yash Kumar",
   phones: ["9896371546", "7404871546"],
   whatsapp: "917404871546",
-  address: "Main Market Road, Near Bus Stand, Haryana",
+  address: "392/1, Gali 2, Opp. Taneja Dairy, Mochiyon Wali Gali, Sirsa, Haryana 125055",
+  mapsQuery: "Taneja Dairy, Mochiyon Wali Gali, Sirsa, Haryana 125055",
 };
 
 export function waLink(message: string) {
