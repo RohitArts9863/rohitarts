@@ -10,33 +10,128 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as CartRouteImport } from './routes/cart'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as LetterPadsRouteImport } from './routes/letter-pads'
+import { Route as ShadiCardsRouteImport } from './routes/shadi-cards'
+import { Route as VisitingCardsRouteImport } from './routes/visiting-cards'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LetterPadsRoute = LetterPadsRouteImport.update({
+  id: '/letter-pads',
+  path: '/letter-pads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShadiCardsRoute = ShadiCardsRouteImport.update({
+  id: '/shadi-cards',
+  path: '/shadi-cards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VisitingCardsRoute = VisitingCardsRouteImport.update({
+  id: '/visiting-cards',
+  path: '/visiting-cards',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
+  '/letter-pads': typeof LetterPadsRoute
+  '/shadi-cards': typeof ShadiCardsRoute
+  '/visiting-cards': typeof VisitingCardsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
+  '/letter-pads': typeof LetterPadsRoute
+  '/shadi-cards': typeof ShadiCardsRoute
+  '/visiting-cards': typeof VisitingCardsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
+  '/letter-pads': typeof LetterPadsRoute
+  '/shadi-cards': typeof ShadiCardsRoute
+  '/visiting-cards': typeof VisitingCardsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/cart'
+    | '/checkout'
+    | '/contact'
+    | '/letter-pads'
+    | '/shadi-cards'
+    | '/visiting-cards'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/cart'
+    | '/checkout'
+    | '/contact'
+    | '/letter-pads'
+    | '/shadi-cards'
+    | '/visiting-cards'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/cart'
+    | '/checkout'
+    | '/contact'
+    | '/letter-pads'
+    | '/shadi-cards'
+    | '/visiting-cards'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  CartRoute: typeof CartRoute
+  CheckoutRoute: typeof CheckoutRoute
+  ContactRoute: typeof ContactRoute
+  LetterPadsRoute: typeof LetterPadsRoute
+  ShadiCardsRoute: typeof ShadiCardsRoute
+  VisitingCardsRoute: typeof VisitingCardsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +143,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/letter-pads': {
+      id: '/letter-pads'
+      path: '/letter-pads'
+      fullPath: '/letter-pads'
+      preLoaderRoute: typeof LetterPadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shadi-cards': {
+      id: '/shadi-cards'
+      path: '/shadi-cards'
+      fullPath: '/shadi-cards'
+      preLoaderRoute: typeof ShadiCardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/visiting-cards': {
+      id: '/visiting-cards'
+      path: '/visiting-cards'
+      fullPath: '/visiting-cards'
+      preLoaderRoute: typeof VisitingCardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  CartRoute: CartRoute,
+  CheckoutRoute: CheckoutRoute,
+  ContactRoute: ContactRoute,
+  LetterPadsRoute: LetterPadsRoute,
+  ShadiCardsRoute: ShadiCardsRoute,
+  VisitingCardsRoute: VisitingCardsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
