@@ -27,8 +27,8 @@ const sizes = ["A4", "A5"];
 const papers = ["Plain", "Ruled"];
 
 function LetterPads() {
-  const [size, setSize] = useState(sizes[0]);
-  const [paper, setPaper] = useState(papers[0]);
+  const [size, setSize] = useState<string>("A4");
+  const [paper, setPaper] = useState<string>("Plain");
   const [qty, setQty] = useState(10);
 
   const link = waLink(

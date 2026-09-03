@@ -29,7 +29,7 @@ const finishes = ["Glossy", "Matte"];
 function VisitingCards() {
   const { addItem } = useCart();
   const [variantId, setVariantId] = useState<string>(VISITING_CARD_VARIANTS[0].id);
-  const [finish, setFinish] = useState(finishes[0]);
+  const [finish, setFinish] = useState<string>("Glossy");
   const [qty, setQty] = useState(1);
   const [designNote, setDesignNote] = useState("");
   const [added, setAdded] = useState(false);
