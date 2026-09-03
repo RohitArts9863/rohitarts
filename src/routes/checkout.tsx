@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import QRCode from "qrcode";
 import { useCart } from "@/lib/cart";
-import { BUSINESS, inr, waLink } from "@/lib/shop";
+import { BUSINESS, inr, makeTxnRef, upiLink, waLink } from "@/lib/shop";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -23,8 +24,22 @@ function Checkout() {
   const [form, setForm] = useState({ name: "", phone: "", address: "" });
   const [payment, setPayment] = useState("cod");
   const [placed, setPlaced] = useState(false);
+  const [utr, setUtr] = useState("");
+  const [qr, setQr] = useState("");
+  const [txnRef] = useState(() => makeTxnRef());
 
-  const valid = form.name.trim() && form.phone.trim() && form.address.trim();
+  const upiUri = useMemo(
+    () => upiLink(subtotal, `${BUSINESS.name} order ${txnRef}`, txnRef),
+    [subtotal, txnRef],
+  );
+
+  useEffect(() => {
+    if (payment !== "upi" || subtotal <= 0) return;
+    QRCode.toDataURL(upiUri, { width: 512, margin: 1 }).then(setQr).catch(() => setQr(""));
+  }, [payment, upiUri, subtotal]);
+
+  const detailsValid = form.name.trim() && form.phone.trim() && form.address.trim();
+  const valid = detailsValid && (payment !== "upi" || utr.trim().length >= 6);
 
   function placeOrder() {
     if (!valid || items.length === 0) return;
@@ -36,9 +51,11 @@ function Checkout() {
           )} (${i.designNote})`,
       )
       .join("\n");
-    const msg = `New order from ${form.name}\nPhone: ${form.phone}\nAddress: ${form.address}\nPayment: ${
-      payment === "cod" ? "Cash on Delivery" : "Online payment"
-    }\n\n${summary}\n\nTotal: ${inr(subtotal)}`;
+    const payLine =
+      payment === "cod"
+        ? "Cash on Delivery"
+        : `UPI paid to ${BUSINESS.upiId} · Ref ${txnRef} · UTR/Txn ID: ${utr.trim()}`;
+    const msg = `New order from ${form.name}\nPhone: ${form.phone}\nAddress: ${form.address}\nPayment: ${payLine}\n\n${summary}\n\nTotal: ${inr(subtotal)}`;
     window.open(waLink(msg), "_blank");
     clear();
     setPlaced(true);
@@ -49,8 +66,8 @@ function Checkout() {
       <div className="mx-auto max-w-3xl px-4 pt-10 text-center">
         <h1 className="text-[24px] font-bold text-brand-deep">Order placed</h1>
         <p className="mt-2 text-[13px] text-muted-foreground">
-          Thank you! We've received your order details. {BUSINESS.owner} will confirm on
-          WhatsApp shortly.
+          Thank you! We've received your order details. {BUSINESS.owner} will verify the
+          payment and confirm on WhatsApp shortly.
         </p>
         <Link
           to="/"
@@ -135,9 +152,9 @@ function Checkout() {
               {[
                 { id: "cod", label: "Cash on Delivery", note: "Pay when you collect" },
                 {
-                  id: "online",
-                  label: "Online payment",
-                  note: "UPI / card link sent on WhatsApp",
+                  id: "upi",
+                  label: "Pay by UPI",
+                  note: "GPay / PhonePe / Paytm",
                 },
               ].map((p) => (
                 <label
@@ -164,6 +181,44 @@ function Checkout() {
                 </label>
               ))}
             </div>
+
+            {payment === "upi" && (
+              <div className="mt-4 rounded-xl bg-secondary/60 p-4 ring-1 ring-accent/40">
+                <p className="text-[13px] font-bold text-brand-deep">
+                  Pay {inr(subtotal)} to {BUSINESS.upiId}
+                </p>
+                <p className="mt-1 text-[11px] text-muted-foreground">
+                  Reference {txnRef} · {BUSINESS.upiName}
+                </p>
+
+                {qr && (
+                  <img
+                    src={qr}
+                    alt={`UPI QR code to pay ${inr(subtotal)} to ${BUSINESS.upiId}`}
+                    className="mx-auto mt-3 h-44 w-44 rounded-lg bg-card p-2 ring-1 ring-primary/15"
+                  />
+                )}
+
+                <a
+                  href={upiUri}
+                  className="mt-3 flex h-11 w-full items-center justify-center rounded-xl bg-accent text-[13px] font-bold text-accent-foreground shadow-cta"
+                >
+                  Open UPI app to pay
+                </a>
+                <p className="mt-2 text-center text-[11px] text-muted-foreground">
+                  Scan the QR on another phone, or tap the button on mobile.
+                </p>
+
+                <div className="mt-3">
+                  <Field
+                    label="UPI transaction / UTR number"
+                    value={utr}
+                    onChange={setUtr}
+                    placeholder="Enter the 12-digit UTR after paying"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           <button
@@ -172,7 +227,8 @@ function Checkout() {
             onClick={placeOrder}
             className="h-12 w-full rounded-xl bg-primary text-[14px] font-bold text-primary-foreground shadow-cta disabled:opacity-50"
           >
-            Place Order · {inr(subtotal)}
+            {payment === "upi" ? "Confirm Payment & Place Order" : "Place Order"} ·{" "}
+            {inr(subtotal)}
           </button>
         </div>
       )}
